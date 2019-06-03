@@ -7,7 +7,7 @@ Created on Sun Jun  2 10:39:27 2019
 
 from sentence_parser import syntesize_sentence
 from flask import Flask, request
-import requests
+#import requests
 
 IP = "127.0.0.1"
 PORT = 3000
