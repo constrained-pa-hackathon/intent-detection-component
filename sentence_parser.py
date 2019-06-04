@@ -29,7 +29,7 @@ VERB_2_VERB_DICT = {
         "update" : "set"}
 
 
-SPECIAL_NUM_SYMBOLS = {"point":".", "dot":"."}
+SPECIAL_NUM_SYMBOLS = {"point":".", "dot":".", "period": "."}
     
 nlp = en_core_web_sm.load()
 #parser = DependencyParser(nlp.vocab)
@@ -46,7 +46,11 @@ def string_to_numerical_string (num_named_string):
         elif(sub_str in SPECIAL_NUM_SYMBOLS):
             out_string += SPECIAL_NUM_SYMBOLS[sub_str]
         else:
-            print(">>>Error! Found that string %s cant be parsed because it has the char %s" %(num_named_string, sub_str))
+            try:
+                num = float(sub_str)
+                out_string += sub_str
+            except:
+                print(">>>Error! Found that string %s cant be parsed because it has the char %s" %(num_named_string, sub_str))
     return out_string
 
 def getAction(spacy_sentence):
@@ -85,7 +89,7 @@ def getValue(spacy_sentence, action, sentence_object):
         for token in spacy_sentence:
             if(token.dep_ == 'prep'):
                 if(token.head in [action, sentence_object]):
-                    if(action.lemma_ in ["set", "update"]):
+                    if(action.lemma_.lower() in ["set", "update"]):
                         current_token = spacy_sentence[token.i+1]
                         value = ""
                         while(current_token.pos_ == "NUM" or
@@ -96,13 +100,13 @@ def getValue(spacy_sentence, action, sentence_object):
                             else:
                                 break
                         return {"freq" : string_to_numerical_string(value)} 
-                    elif(action.lemma_ in ["get"]):
+                    elif(action.lemma_.lower() in ["get"]):
                         net = spacy_sentence[token.i+1]
                         num_in_net = spacy_sentence[token.i+2]
                         return {'callsign' : net.text,
                                 'number' : string_to_numerical_string(num_in_net.text)}
 
-    if(action.lemma_ in ["read"]):
+    if(action.lemma_.lower() in ["read"]):
         number = string_to_numerical_string(spacy_sentence[sentence_object.i+1].lemma_)
         return {'id':number}
                     
@@ -139,7 +143,7 @@ def syntesize_sentence(sentence):
     
     
      #print(pre_out_json)
-  #  print("**************")
+    print("**************")
     print(processed_tokens)
     out_json = { field: token.lemma_ for field, token in pre_out_json.items()}
     if(out_json['action'] in VERB_2_VERB_DICT.keys()):
