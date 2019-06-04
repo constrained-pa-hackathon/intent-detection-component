@@ -5,9 +5,12 @@ Created on Sun Jun  2 10:39:27 2019
 @author: barak
 """
 
+from __future__ import unicode_literals
+
 from sentence_parser import syntesize_sentence
 from flask import Flask, request
 #import requests
+
 
 IP = "127.0.0.1"
 PORT = 3000
@@ -37,4 +40,6 @@ def sentence_analyzer():
  #   r = requests.post(url = request_url)
     return request_url
 
-app.run()
+if __name__ == "__main__":
+    app.run()
+

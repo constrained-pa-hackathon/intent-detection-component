@@ -5,6 +5,9 @@ Created on Thu May 30 17:05:42 2019
 @author: barak
 """
 
+from __future__ import unicode_literals
+
+
 #from spacy.vocab import Vocab
 #from spacy.language import Language
 #from spacy.lang.en import English
@@ -48,7 +51,7 @@ def string_to_numerical_string (num_named_string):
 
 def getAction(spacy_sentence):
     for token in spacy_sentence:
-        if(token.tag_ == "VB"):
+        if(token.pos_ == "VERB"):
             return token
     print(">>> Error: Cannot find action")
     return nlp(" ")[0]
