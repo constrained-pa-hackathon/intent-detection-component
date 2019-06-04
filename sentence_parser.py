@@ -81,7 +81,7 @@ def getValue(spacy_sentence, action, sentence_object):
 #               cmd.upper(),
 #               z.similarity(spacy_sentence)))
 #        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-    if(action.lemma_ in MODIFIER_CMD + GETTERS_COMMAND):
+    if(action.lemma_.lower() in MODIFIER_CMD + GETTERS_COMMAND):
         for token in spacy_sentence:
             if(token.dep_ == 'prep'):
                 if(token.head in [action, sentence_object]):
