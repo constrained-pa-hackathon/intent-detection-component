@@ -37,6 +37,7 @@ nlp = en_core_web_sm.load()
 
 def string_to_numerical_string (num_named_string):
 
+    num_named_string = num_named_string.lower()
     out_string = ""
     for sub_str in num_named_string.split():
         if(sub_str == ""):
@@ -103,7 +104,7 @@ def getValue(spacy_sentence, action, sentence_object):
                     elif(action.lemma_.lower() in ["get"]):
                         net = spacy_sentence[token.i+1]
                         num_in_net = spacy_sentence[token.i+2]
-                        return {'callsign' : net.text,
+                        return {'callsign' : net.text.lower(),
                                 'number' : string_to_numerical_string(num_in_net.text)}
 
     if(action.lemma_.lower() in ["read"]):
@@ -145,7 +146,7 @@ def syntesize_sentence(sentence):
      #print(pre_out_json)
     print("**************")
     print(processed_tokens)
-    out_json = { field: token.lemma_ for field, token in pre_out_json.items()}
+    out_json = { field: token.lemma_.lower() for field, token in pre_out_json.items()}
     if(out_json['action'] in VERB_2_VERB_DICT.keys()):
         out_json['action'] = VERB_2_VERB_DICT[out_json['action']]
     out_json['value'] = value
