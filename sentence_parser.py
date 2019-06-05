@@ -29,7 +29,7 @@ VERB_2_VERB_DICT = {
         "update" : "set"}
 
 
-SPECIAL_NUM_SYMBOLS = {"point":".", "dot":".", "period": "."}
+SPECIAL_NUM_SYMBOLS = {".":".", "point":".", "dot":".", "period": ".", ",":'.', 'comma':'.'}
     
 nlp = en_core_web_sm.load()
 #parser = DependencyParser(nlp.vocab)
@@ -38,6 +38,7 @@ nlp = en_core_web_sm.load()
 def string_to_numerical_string (num_named_string):
 
     num_named_string = num_named_string.lower()
+    print(num_named_string)
     out_string = ""
     for sub_str in num_named_string.split():
         if(sub_str == ""):
@@ -94,8 +95,11 @@ def getValue(spacy_sentence, action, sentence_object):
                         current_token = spacy_sentence[token.i+1]
                         value = ""
                         while(current_token.pos_ == "NUM" or
-                              current_token.lower_ in SPECIAL_NUM_SYMBOLS):
-                            value = "%s %s" % (value, current_token.lower_)
+                              current_token.lower_ in SPECIAL_NUM_SYMBOLS.keys() or
+                               current_token.pos_ == "PUNCT" or
+                              current_token.pos_ =="SPACE"):
+                            if(current_token.pos_ !="SPACE"):
+                               value = "%s %s" % (value, current_token.lower_)
                             if(current_token.i != len(spacy_sentence)-1):
                                 current_token = spacy_sentence[current_token.i+1]
                             else:
