@@ -68,6 +68,9 @@ def string_to_numerical_string (num_named_string):
                 out_string += sub_str
             except:
                 print(">>>Error! Found that string %s cant be parsed because it has the char %s" %(num_named_string, sub_str))
+    if len(out_string) == 5 and "." not in out_string:
+        out_string = out_string[0:3] + "." + out_string[3:5]
+
     return out_string
 
 def getAction(spacy_sentence):

@@ -102,4 +102,5 @@ ENV/
 .idea/modules.xml
 gradle.xml
 .idea/libraries/*.xml
+.idea/workspace.xml
 
