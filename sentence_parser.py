@@ -25,6 +25,17 @@ NUMBERS_DICT = {"zero":"0",
                 "eight": "8",
                 "nine": "9"}
 
+WORDS_THAT_SOUND_LIKE_NUMBERS = {
+    "to" : "2",
+    "free" : "3",
+    "for" : "4",
+    "ate" : "8",
+    "sics" : "6",
+    "sex" : "6",
+    "nein" : "9",
+    "sick" : "6",
+}
+
 VERB_2_VERB_DICT = {
         "update" : "set"}
 
@@ -47,6 +58,8 @@ def string_to_numerical_string (num_named_string):
             out_string += NUMBERS_DICT[sub_str]
         elif(sub_str in SPECIAL_NUM_SYMBOLS):
             out_string += SPECIAL_NUM_SYMBOLS[sub_str]
+        elif(sub_str in  WORDS_THAT_SOUND_LIKE_NUMBERS):
+            out_string += WORDS_THAT_SOUND_LIKE_NUMBERS[sub_str]
         else:
             try:
                 num = float(sub_str)
@@ -88,14 +101,20 @@ def getFrequency(spacy_sentence, token):
 def getNumberedFrequency(current_token, spacy_sentence, value):
     while (current_token.pos_ == "NUM" or
            current_token.lower_ in SPECIAL_NUM_SYMBOLS.keys() or
+           current_token.lower_ in WORDS_THAT_SOUND_LIKE_NUMBERS.keys() or
            current_token.pos_ == "PUNCT" or
            current_token.pos_ == "SPACE"):
+
         if current_token.pos_ != "SPACE":
             value = "%s %s" % (value, current_token.lower_)
+
         if current_token.i != len(spacy_sentence) - 1:
             current_token = spacy_sentence[current_token.i + 1]
         else:
             break
+
+        print(current_token.lower_)
+    print("***")
     return value
 
 
