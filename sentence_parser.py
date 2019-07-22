@@ -12,6 +12,8 @@ from __future__ import unicode_literals
 #from spacy.language import Language
 #from spacy.lang.en import English
 #from spacy.pipeline import DependencyParser
+import re
+
 import en_core_web_sm
 
 NUMBERS_DICT = {"zero":"0",
@@ -91,7 +93,7 @@ def getFrequency(spacy_sentence, token):
     value = ""
     #If given the first token is a number
     #then we assume it means that our frequency is number based
-    if current_token.pos_ == "NUM":
+    if current_token.pos_ == "NUM" or current_token.lower_ in WORDS_THAT_SOUND_LIKE_NUMBERS.keys():
         value = getNumberedFrequency(current_token, spacy_sentence, value)
         return {"freq": string_to_numerical_string(value)}
     #Otherwise it is net based
@@ -149,6 +151,16 @@ def getValue(spacy_sentence, action, sentence_object):
 
 
 def getCallsignAndNumber(spacy_sentence, token):
+
+    # Special case - tanker is not a real callsign and has no number
+    if spacy_sentence[token.i + 1].lower_ == "tanker":
+        return {'callsign': "tanker",
+                'number': ""}
+
+    if spacy_sentence[token.i + 1].lower_ == "the" and spacy_sentence[token.i + 2].lower_ == "tanker":
+        return {'callsign': "tanker",
+                'number': ""}
+
     net = spacy_sentence[token.i + 1]
     num_in_net = spacy_sentence[token.i + 2]
     return {'callsign': net.text.lower(),
@@ -156,6 +168,10 @@ def getCallsignAndNumber(spacy_sentence, token):
 
 
 def syntesize_sentence(sentence):
+
+    # Remove duplicate spaces
+    sentence = re.sub(' +', ' ', sentence)
+
     pre_out_json= {}
     value = ""
 
