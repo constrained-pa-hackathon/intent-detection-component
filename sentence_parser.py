@@ -39,7 +39,8 @@ WORDS_THAT_SOUND_LIKE_NUMBERS = {
 }
 
 VERB_2_VERB_DICT = {
-        "update" : "set"}
+        "update": "set",
+        "push": "set"}
 
 
 SPECIAL_NUM_SYMBOLS = {".":".", "point":".", "dot":".", "period": ".", ",":'.', 'comma':'.'}
@@ -139,12 +140,14 @@ def getValue(spacy_sentence, action, sentence_object):
 #        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
     if action.lemma_.lower() in MODIFIER_CMD + GETTERS_COMMAND:
         for token in spacy_sentence:
-            if token.dep_ == 'prep':
-                if token.head in [action, sentence_object]:
-                    if action.lemma_.lower() in ["set", "update"]:
-                        return getFrequency(spacy_sentence, token)
-                    elif action.lemma_.lower() in ["get"]:
-                        return getCallsignAndNumber(spacy_sentence, token)
+            print("token.dep_: " + token.dep_,)
+            print("token.head: " + token.head.lower_)
+            if token.dep_ in ('prep') and token.head in [action, sentence_object]:
+                if action.lemma_.lower() in ["set", "update"]:
+                    return getFrequency(spacy_sentence, token)
+                elif action.lemma_.lower() in ["get"]:
+                    return getCallsignAndNumber(spacy_sentence, token)
+
 
     if action.lemma_.lower() in ["read"]:
         number = string_to_numerical_string(spacy_sentence[sentence_object.i+1].lemma_)
